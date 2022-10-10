@@ -1,0 +1,34 @@
+{
+	"name": "@yme/nodo",
+	"description": "node with swc",
+	"version": "0.0.0",
+	"repository": "minosss/run",
+	"author": "mino",
+	"type": "module",
+	"license": "MIT",
+	"scripts": {
+		"build": "swc src --copy-files -d dist -C jsc.target=es2020",
+		"test": "pnpm build && node ./dist/cli.js tests/foo.ts"
+	},
+	"files": [
+		"dist"
+	],
+	"bin": {
+		"nodo": "./dist/cli.js"
+	},
+	"exports": {
+		".": "./dist/index.js",
+		"./cli": "./dist/cli.js",
+		"./loader": "./dist/loader.js"
+	},
+	"dependencies": {
+		"@swc/core": "^1.3.6",
+		"cross-spawn": "^7.0.3",
+		"get-tsconfig": "^4.2.0"
+	},
+	"devDependencies": {
+		"@swc/cli": "^0.1.57",
+		"@yme/prettier-config": "^0.1.3",
+		"prettier": "^2.7.1"
+	}
+}
