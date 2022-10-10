@@ -1,7 +1,7 @@
 {
 	"name": "@yme/nodo",
 	"description": "node with swc",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"publishConfig": {
 		"access": "public"
 	},
