@@ -5,7 +5,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"repository": "minosss/run",
+	"repository": "minosss/nodo",
 	"author": "mino",
 	"type": "module",
 	"license": "MIT",
