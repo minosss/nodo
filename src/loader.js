@@ -28,6 +28,10 @@ async function withExtensions(specifier, context, next) {
 }
 
 export async function resolve(specifier, context, next) {
+	if (specifier.startsWith('node:')) {
+		specifier = specifier.slice(5);
+	}
+
 	const isResolvePath = /^\.{0,2}\//.test(specifier);
 	const isPath = specifier.startsWith('file://') || isResolvePath;
 
@@ -85,6 +89,18 @@ export async function load(url, context, next) {
 	if (/\.(ts|js)$/.test(url)) {
 		const output = await transform(loaded.source.toString(), {
 			// TODO tsconfig to swc config
+			jsc: {
+				parser: isTs ? {
+					syntax: 'typescript',
+					tsx: true,
+					decorators: false,
+					dynamicImport: true,
+				}: {
+					syntax: 'ecmascript',
+					jsx: true,
+					decorators: false,
+				},
+			},
 		});
 
 		return {
