@@ -3,6 +3,7 @@ import {getTsconfig, createPathsMatcher} from 'get-tsconfig';
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+import {resolveTsPath} from './resolve-ts-path.js';
 
 const tsconfig = getTsconfig();
 const isTs = tsconfig !== null;
@@ -44,6 +45,23 @@ export async function resolve(specifier, context, next) {
 		}
 	}
 
+	if (/\.([cm]?ts|[tj]sx)$/.test(context.parentURL)) {
+		const tsPath = resolveTsPath(specifier);
+		if (tsPath) {
+			try {
+				return await resolve(tsPath, context, next);
+			} catch (error) {
+				const { code } = error;
+				if (
+					code !== 'ERR_MODULE_NOT_FOUND'
+					&& code !== 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+				) {
+					throw error;
+				}
+			}
+		}
+	}
+
 	let resolved;
 
 	try {
@@ -60,6 +78,7 @@ export async function resolve(specifier, context, next) {
 					specifier
 				);
 			}
+
 			resolved = await withExtensions(specifier, context, next);
 		}
 
